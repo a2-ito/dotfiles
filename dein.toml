@@ -1,0 +1,33 @@
+[[plugins]]
+repo = 'hashivim/vim-terraform'
+on_ft = ['tf']
+
+[[plugins]]
+repo = 'mfussenegger/nvim-dap'
+hook_add = '''
+  source ~/.config/nvim/plugins/nvim-dap.lua
+'''
+
+[[plugins]]
+repo = 'rcarriga/nvim-dap-ui'
+
+[[plugins]]
+repo = 'leoluz/nvim-dap-go'
+
+[[plugins]]
+repo = 'neovim/nvim-lspconfig'
+
+[[plugins]]
+repo = 'nvim-lua/completion-nvim'
+
+[[plugins]]
+repo = 'prabirshrestha/vim-lsp'
+
+[[plugins]]
+repo = 'mattn/vim-lsp-settings'
+
+################################
+# go
+################################
+[[plugins]]
+repo = 'mattn/vim-goimports'
