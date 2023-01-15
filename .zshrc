@@ -12,3 +12,13 @@ alias tmuxg='tmux new-session \; source-file ~/.tmux.session.conf'
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+
+# Go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/a/work/dothatch/tmp/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/a/work/dothatch/tmp/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/a/work/dothatch/tmp/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/a/work/dothatch/tmp/google-cloud-sdk/completion.zsh.inc'; fi
