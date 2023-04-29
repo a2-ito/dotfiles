@@ -1,5 +1,6 @@
 export PATH=/opt/homebrew/bin:$PATH
 export DOCKER_HOST='tcp://127.0.0.1:2375'
+#export DOCKER_HOST=unix://$HOME/.lima/docker/sock/docker.sock
 
 export LSCOLORS=cxfxcxdxbxegedabagacad
 alias ll='ls -lGF'
@@ -22,3 +23,6 @@ if [ -f '/Users/a/work/dothatch/tmp/google-cloud-sdk/path.zsh.inc' ]; then . '/U
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/a/work/dothatch/tmp/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/a/work/dothatch/tmp/google-cloud-sdk/completion.zsh.inc'; fi
+
+# ulimit
+ulimit -n 2048
