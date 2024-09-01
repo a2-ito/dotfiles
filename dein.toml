@@ -2,32 +2,54 @@
 repo = 'hashivim/vim-terraform'
 on_ft = ['tf']
 
-[[plugins]]
-repo = 'mfussenegger/nvim-dap'
-hook_add = '''
-  source ~/.config/nvim/plugins/nvim-dap.lua
-'''
+# 2024.5.6 起動が遅いので一時的にコメントアウト
+# [[plugins]]
+# repo = 'mfussenegger/nvim-dap'
+# hook_add = '''
+#   source ~/.config/nvim/plugins/nvim-dap.lua
+# '''
 
-[[plugins]]
-repo = 'rcarriga/nvim-dap-ui'
+# [[plugins]]
+# repo = 'rcarriga/nvim-dap-nio'
 
-[[plugins]]
-repo = 'leoluz/nvim-dap-go'
+# [[plugins]]
+# repo = 'rcarriga/nvim-dap-ui'
 
-[[plugins]]
-repo = 'neovim/nvim-lspconfig'
+# [[plugins]]
+# repo = 'leoluz/nvim-dap-go'
+
+# [[plugins]]
+# repo = 'neovim/nvim-lspconfig'
+# hook_add = '''
+# lua << EOF
+# require'lspconfig'.gopls.setup{}
+# EOF
+# '''
 
 [[plugins]]
 repo = 'nvim-lua/completion-nvim'
 
-[[plugins]]
-repo = 'prabirshrestha/vim-lsp'
+# [[plugins]]
+# repo = 'prabirshrestha/vim-lsp'
+
+# [[plugins]]
+# repo = 'mattn/vim-lsp-settings'
 
 [[plugins]]
-repo = 'mattn/vim-lsp-settings'
+repo = 'tpope/vim-commentary'
 
 ################################
 # go
 ################################
 [[plugins]]
 repo = 'mattn/vim-goimports'
+
+################################
+# Typescript
+################################
+#[[plugins]]
+#repo = 'neoclide/coc.nvim'
+
+# Copilot
+[[plugins]]
+repo = 'github/copilot.vim'
