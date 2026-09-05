@@ -31,6 +31,13 @@ do
 	_file=`echo $i | cut -f1 -d','`
 	_target=`echo $i | cut -f2 -d','`
 
+	# 宛先が末尾 / ならディレクトリ、そうでなければファイルパスなので親を作る
+	case "${_target}" in
+		*/) _dir="${_target}" ;;
+		*)  _dir="${_target:h}" ;;
+	esac
+	mkdir -p "${_dir}"
+
 	echo ln -s ${PWD}/${_file} ${_target}
 	ln -s ${PWD}/${_file} "${_target}"
 done
