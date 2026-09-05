@@ -1,0 +1,33 @@
+# ~/.config/ghostty/config
+# cmux はこのファイルを読んで「ターミナルの見た目・挙動」を決める。
+# アプリの挙動 (サイドバー/通知/ブラウザ/ショートカット) は ~/.config/cmux/cmux.json 側。
+# 編集後は `cmux reload-config` で両方リロード（アプリ再起動不要）。
+
+# --- フォント（iTerm2 の設定を踏襲）---
+font-family = SauceCodePro Nerd Font Mono
+font-size = 12
+font-thicken = true
+
+# --- テーマ（macOS の外観に追従して自動切替）---
+theme = light:Catppuccin Latte,dark:Catppuccin Mocha
+
+# --- 背景 ---
+background-opacity = 0.96
+background-blur = 20
+
+# --- カーソル ---
+cursor-style = block
+cursor-style-blink = false
+
+# --- スクロールバック（エージェントの長い出力を遡れるように多め）---
+scrollback-limit = 100000
+
+# --- その他 ---
+# URL などを ⌘+クリックで開く / 選択で自動コピー
+copy-on-select = clipboard
+# 全角・絵文字の幅ズレ対策
+grapheme-width-method = unicode
+
+# シェル統合がプロンプトでカーソルを bar に変えるのを無効化
+# （cursor-style = block を尊重させる。省略した機能はデフォルトのまま）
+shell-integration-features = no-cursor

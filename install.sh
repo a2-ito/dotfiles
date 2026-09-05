@@ -17,6 +17,8 @@ colima/docker.yaml,${HOME}/.colima/_templates/default.yml
 claude/keybindings.json,${HOME}/.claude/
 claude/settings.json,${HOME}/.claude/
 claude/style.md,${HOME}/.claude/output-styles/
+cmux/cmux.json,${HOME}/.config/cmux/
+ghostty/config,${HOME}/.config/ghostty/
 .terraformrc,${HOME}/
 )
 
