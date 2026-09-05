@@ -3,9 +3,25 @@
 config=(
 .zshrc,${HOME}/
 .tmux.conf,${HOME}/
-.tmux.session.conf,${HOME}/
-init.vim,${HOME}/.config/nvim/
-dein.toml,${HOME}/.config/nvim/
+# .tmux.session.conf,${HOME}/
+# init.vim,${HOME}/.config/nvim/
+init.lua,${HOME}/.config/nvim/
+lua/lazy_nvim.lua,${HOME}/.config/nvim/lua/
+lua/autocmds.lua,${HOME}/.config/nvim/lua/
+lua/plugins.lua,${HOME}/.config/nvim/lua/
+lua/config/lualine.lua,${HOME}/.config/nvim/lua/config/
+lua/config/nvim-tree.lua,${HOME}/.config/nvim/lua/config/
+# dein.toml,${HOME}/.config/nvim/
+opencode.jsonc,${HOME}/.config/opencode/
+colima/docker.yaml,${HOME}/.colima/_templates/default.yml
+claude/keybindings.json,${HOME}/.claude/
+claude/settings.json,${HOME}/.claude/
+claude/style.md,${HOME}/.claude/output-styles/
+.terraformrc,${HOME}/
+)
+
+directories=(
+${HOME}/.terraformrc.d/plugin-cache
 )
 
 for i in ${config[@]}
@@ -16,3 +32,12 @@ do
 	echo ln -s ${PWD}/${_file} ${_target}
 	ln -s ${PWD}/${_file} "${_target}"
 done
+
+for i in ${directories[@]}
+do
+	echo mkdir -p $i
+	mkdir -p $i
+done
+
+# brew
+./brew.sh
