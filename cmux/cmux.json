@@ -77,6 +77,26 @@
       "renameTab": [
         "ctrl+q",
         ","
+      ],
+      "goToWorkspace": [
+        "ctrl+q",
+        "s"
+      ],
+      "prevSidebarTab": [
+        "ctrl+q",
+        "shift+9"
+      ],
+      "nextSidebarTab": [
+        "ctrl+q",
+        "shift+0"
+      ],
+      "renameWorkspace": [
+        "ctrl+q",
+        "shift+4"
+      ],
+      "commandPalette": [
+        "ctrl+q",
+        "w"
       ]
     }
   }
