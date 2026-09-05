@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+source "${0:A:h}/copies.zsh"
+
 config=(
 .zshrc,${HOME}/
 .tmux.conf,${HOME}/
@@ -17,7 +19,6 @@ colima/docker.yaml,${HOME}/.colima/_templates/default.yml
 claude/keybindings.json,${HOME}/.claude/
 claude/settings.json,${HOME}/.claude/
 claude/style.md,${HOME}/.claude/output-styles/
-cmux/cmux.json,${HOME}/.config/cmux/
 ghostty/config,${HOME}/.config/ghostty/
 .terraformrc,${HOME}/
 )
@@ -40,6 +41,18 @@ do
 
 	echo ln -s ${PWD}/${_file} ${_target}
 	ln -s ${PWD}/${_file} "${_target}"
+done
+
+for i in ${copies[@]}
+do
+	_file=`echo $i | cut -f1 -d','`
+	_target=`echo $i | cut -f2 -d','`
+
+	mkdir -p "${_target:h}"
+
+	# 既存の設定を壊さないよう、無い場合のみ配置する (ln -s と同じ非破壊の挙動)
+	echo cp -n ${PWD}/${_file} ${_target}
+	cp -n "${PWD}/${_file}" "${_target}"
 done
 
 for i in ${directories[@]}
