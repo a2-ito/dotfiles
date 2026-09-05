@@ -1,21 +1,32 @@
-images:
-- location: "https://github.com/lima-vm/alpine-lima/releases/download/v0.2.32/alpine-lima-std-3.18.0-x86_64.iso"
-  arch: "x86_64"
-  digest: "sha512:7b00fff78736a27a24e4a7de5f28037e9c7cf0fc539a33ec551c6ac619eb54237b5f25bfa35512fa7233cf23396dc249592710ef9150f619afa15267f9c8cbd4"
-- location: "https://github.com/lima-vm/alpine-lima/releases/download/v0.2.32/alpine-lima-std-3.18.0-aarch64.iso"
-  arch: "aarch64"
-  digest: "sha512:bf23a22e05854670eef74d9bfad056caa249832f22d5594eb6bb02fa9aae109d33c764242f862d48de5b6715c4792a3ee29c19888a0711fb27113ba5cf1ccf21"
+# images:
+# - location: "https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/cloud/nocloud_alpine-3.20.2-x86_64-uefi-cloudinit-r0.qcow2"
+#   arch: "x86_64"
+#   digest: "sha512:5828254c27c948824c4c6d4fb88c4d96ee9b5b58ae455036b1571bb037a5b5de124e1d55f00386b9e711cef7771146278bd5eb1036a2f8db6fa34611393ebec1"
+# - location: "https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/cloud/nocloud_alpine-3.20.2-aarch64-uefi-cloudinit-r0.qcow2"
+#   arch: "aarch64"
+#   digest: "sha512:76eeef3cb1b38b3a0c2e745d8108558645220355cd870cba3a88198bcd0036485a0a683d8469f8405251918e972d24c461d418a30112e92efe44b460e4cba7ba"
+# # - location: "https://github.com/lima-vm/alpine-lima/releases/download/v0.2.32/alpine-lima-std-3.18.0-x86_64.iso"
+#   arch: "x86_64"
+#   digest: "sha512:7b00fff78736a27a24e4a7de5f28037e9c7cf0fc539a33ec551c6ac619eb54237b5f25bfa35512fa7233cf23396dc249592710ef9150f619afa15267f9c8cbd4"
+# - location: "https://github.com/lima-vm/alpine-lima/releases/download/v0.2.39/alpine-lima-std-3.18.0-aarch64.iso"
+#   arch: "aarch64"
+#   digest: "sha512:bf23a22e05854670eef74d9bfad056caa249832f22d5594eb6bb02fa9aae109d33c764242f862d48de5b6715c4792a3ee29c19888a0711fb27113ba5cf1ccf21"
+minimumLimaVersion: 1.1.0
+
+base:
+- template://_images/alpine
+- template://_default/mounts
+
+arch: aarch64
 
 vmType: "vz"
+
 rosetta:
-  # Enable Rosetta for Linux.
-  # Hint: try `softwareupdate --install-rosetta` if Lima gets stuck at `Installing rosetta...`
   enabled: true
-  # Register rosetta to /proc/sys/fs/binfmt_misc
   binfmt: true
 
 mounts:
-- location: "~/work"
+- location: "~"
   writable: true
 - location: "/tmp/lima"
   writable: true
@@ -36,7 +47,10 @@ provision:
     usermod -aG docker a
     chmod 666 /var/run/docker.sock
     mkdir /etc/docker
-    echo "{\"hosts\": [\"tcp://127.0.0.1:2375\", \"unix:///var/run/docker.sock\"]}" > /etc/docker/daemon.json
+    # containerd-snapshotter を無効化し classic イメージストアを使う。
+    # 有効だと build/push が OCI(attestation 付き index)になり、AWS Lambda の
+    # コンテナイメージが "image manifest ... media type ... not supported" で弾かれるため。
+    echo "{\"hosts\": [\"tcp://127.0.0.1:2375\", \"unix:///var/run/docker.sock\"], \"features\": {\"containerd-snapshotter\": false}}" > /etc/docker/daemon.json
     service docker start
 
 cpus: 2
