@@ -53,6 +53,26 @@ prefix は `Ctrl+q` で、tmux (`.tmux.conf`) の prefix と揃えてある。
 | `[` | `toggleTerminalCopyMode` | コピーモードのトグル |
 | `w` | `commandPalette` | コマンドパレットを開く |
 
+## cmux のタブ名自動設定
+
+素のターミナルのタブ名を `<リポジトリ名>:<ブランチ名>` に自動で設定する。
+
+| cd 先 | タブ名 |
+| --- | --- |
+| git リポジトリ内 | `dotfiles:main` |
+| detached HEAD | `dotfiles:8e97a78` |
+| git 管理外 | `tmp`（ディレクトリ名） |
+
+仕組みは 2 箇所に分かれている。
+
+- `.zshrc` の `precmd` フックが OSC 2 でタイトルを流す。cmux はこれをタブ名として表示する
+- `ghostty/config` の `shell-integration-features = no-title` で、
+  シェル統合によるタイトル自動設定（カレントディレクトリや実行中コマンド名）を止める
+
+Claude Code などエージェントのサーフェスでは cmux が会話内容からタイトルを付けるため、
+`CMUX_AGENT_LAUNCH_KIND` が設定されている場合はフックを登録しない。
+cmux 外のターミナルでも `CMUX_SURFACE_ID` が無いので何もしない。
+
 ## シークレットスキャン
 
 シークレットの混入を **ローカルのコミット時** と **CI** の二段構えでチェックする。
