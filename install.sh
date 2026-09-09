@@ -61,5 +61,9 @@ do
 	mkdir -p $i
 done
 
+# git hooks (このリポジトリへのコミット時に gitleaks を実行する)
+echo git config core.hooksPath .githooks
+git -C "${0:A:h}" config core.hooksPath .githooks
+
 # brew
 ./brew.sh
