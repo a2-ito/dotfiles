@@ -1,0 +1,26 @@
+name: Auto Merge
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  enable-auto-merge:
+    name: enable auto-merge
+    runs-on: ubuntu-latest
+    # Draft には auto-merge を設定できない。fork からの PR は GITHUB_TOKEN が read-only のため除外する。
+    if: >-
+      !github.event.pull_request.draft &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Enable auto-merge
+        # 必須チェック (Secret Scan) が通った時点で GitHub 側が squash マージし、ブランチを削除する
+        run: gh pr merge "${PR_NUMBER}" --auto --squash --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}

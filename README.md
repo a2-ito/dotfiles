@@ -88,3 +88,18 @@ brew install gitleaks
 | pull request / main への push | その差分のコミット |
 | 毎週月曜 06:00 JST (schedule) | 全コミット履歴 |
 | 手動実行 (workflow_dispatch) | 全コミット履歴 |
+
+## 自動マージ
+
+`.github/workflows/auto-merge.yml` が PR に対して GitHub の auto-merge を有効化する。
+必須チェック (Secret Scan の `gitleaks`) が通った時点で GitHub 側が自動でマージする。
+
+| 項目 | 設定 |
+| --- | --- |
+| 対象 | すべての PR（Draft と fork からの PR は除く） |
+| マージ方式 | squash マージ |
+| マージ後 | 作業ブランチを自動削除 |
+| マージ条件 | main のブランチ保護で `gitleaks` チェックを必須にしている |
+
+Draft の PR は対象外なので、まだマージされたくない場合は Draft で作成し、
+準備ができたら Ready for review にすると auto-merge が有効になる。
