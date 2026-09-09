@@ -1,0 +1,32 @@
+#!/bin/sh
+# ステージされた変更にシークレットが含まれていないか gitleaks でチェックする。
+# 一時的に回避したい場合は SKIP_GITLEAKS=1 git commit ... を使う。
+
+if [ -n "${SKIP_GITLEAKS}" ]; then
+	echo "[gitleaks] SKIP_GITLEAKS が指定されたためスキップします" >&2
+	exit 0
+fi
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+	echo "[gitleaks] gitleaks が見つからないためスキップします (brew install gitleaks で導入できます)" >&2
+	echo "[gitleaks] CI 側の Secret Scan では引き続きチェックされます" >&2
+	exit 0
+fi
+
+# gitleaks v8.19 以降は `git --staged`、それ以前は `protect --staged`
+if gitleaks git --help >/dev/null 2>&1; then
+	set -- git --staged
+else
+	set -- protect --staged
+fi
+
+if ! gitleaks "$@" --redact --verbose --no-banner; then
+	cat >&2 <<'MSG'
+
+[gitleaks] ステージされた変更からシークレットの疑いがある文字列を検出しました。
+  - 実際のシークレットなら、コミットせずに該当箇所を取り除いてください
+  - 誤検知なら .gitleaksignore に finding の fingerprint を追記してください
+  - 今回だけ回避したい場合は SKIP_GITLEAKS=1 git commit ... を使ってください
+MSG
+	exit 1
+fi

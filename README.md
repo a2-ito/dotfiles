@@ -52,3 +52,39 @@ prefix は `Ctrl+q` で、tmux (`.tmux.conf`) の prefix と揃えてある。
 | --- | --- | --- |
 | `[` | `toggleTerminalCopyMode` | コピーモードのトグル |
 | `w` | `commandPalette` | コマンドパレットを開く |
+
+## シークレットスキャン
+
+シークレットの混入を **ローカルのコミット時** と **CI** の二段構えでチェックする。
+検出には [gitleaks](https://github.com/gitleaks/gitleaks) を使う。
+
+### ローカル (pre-commit フック)
+
+`install.sh` が `core.hooksPath` を `.githooks` に設定するので、
+このリポジトリへのコミット時に `.githooks/pre-commit` が自動で走る。
+ステージされた差分のみをスキャンし、検出されるとコミットは中断される。
+
+```sh
+# 手動で設定する場合
+git config core.hooksPath .githooks
+
+# gitleaks の導入 (install.sh 経由なら .Brewfile で入る)
+brew install gitleaks
+```
+
+| 状況 | 挙動 |
+| --- | --- |
+| シークレットを検出 | コミットを中断する |
+| 誤検知 | `.gitleaksignore` に finding の fingerprint を追記して除外する |
+| 一時的に回避したい | `SKIP_GITLEAKS=1 git commit ...` |
+| gitleaks 未インストール | 警告を出してスキップする (CI 側で検出する) |
+
+### CI (GitHub Actions)
+
+`.github/workflows/secret-scan.yml` で実行する。
+
+| トリガー | スキャン範囲 |
+| --- | --- |
+| pull request / main への push | その差分のコミット |
+| 毎週月曜 06:00 JST (schedule) | 全コミット履歴 |
+| 手動実行 (workflow_dispatch) | 全コミット履歴 |
