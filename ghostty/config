@@ -28,6 +28,8 @@ copy-on-select = clipboard
 # 全角・絵文字の幅ズレ対策
 grapheme-width-method = unicode
 
-# シェル統合がプロンプトでカーソルを bar に変えるのを無効化
-# （cursor-style = block を尊重させる。省略した機能はデフォルトのまま）
-shell-integration-features = no-cursor
+# シェル統合の一部機能を無効化（省略した機能はデフォルトのまま）
+#   no-cursor: プロンプトでカーソルを bar に変えるのを止める (cursor-style = block を尊重させる)
+#   no-title : シェル統合によるタイトル自動設定を止める
+#              (.zshrc 側で <リポジトリ名>:<ブランチ名> を設定するため。上書きされると困る)
+shell-integration-features = no-cursor,no-title

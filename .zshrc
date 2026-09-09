@@ -162,6 +162,37 @@ if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)
 __zshrc_log "wt shell init"
 
 # ============================================================
+# === cmux: タブ名を <リポジトリ名>:<ブランチ名> に自動設定 ===
+# ============================================================
+# cmux のタブ名は端末のタイトル (OSC 2) を拾う。ghostty のシェル統合による
+# タイトル自動設定は shell-integration-features = no-title で切ってあるので、
+# ここで流した値がそのまま残る。
+# Claude Code などのエージェント用サーフェスは cmux が会話内容からタイトルを
+# 付けてくれるので、CMUX_AGENT_LAUNCH_KIND が付いている場合は何もしない。
+if [[ -n "$CMUX_SURFACE_ID" && -z "$CMUX_AGENT_LAUNCH_KIND" ]]; then
+  __cmux_set_tab_title() {
+    local title repo branch
+    # git 呼び出しは 1 回で済ませる (1 行目: リポジトリルート / 2 行目: ブランチ名)
+    if repo=$(git rev-parse --show-toplevel --abbrev-ref HEAD 2>/dev/null); then
+      branch="${repo#*$'\n'}"
+      repo="${repo%%$'\n'*}"
+      # detached HEAD のときは短縮 SHA を出す
+      [[ "$branch" == "HEAD" ]] && branch=$(git rev-parse --short HEAD 2>/dev/null)
+      title="${repo:t}:${branch}"
+    else
+      title="${PWD:t}"
+      [[ -z "$title" ]] && title="/"
+    fi
+
+    # printf は builtin なので毎回書いてよい。他が上書きしても次のプロンプトで戻る
+    printf '\033]2;%s\a' "$title"
+  }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd __cmux_set_tab_title
+fi
+__zshrc_log "cmux tab title"
+
+# ============================================================
 # === DEBUG: 計測終了 & zprof 表示 ===
 # ============================================================
 if [[ -n "$ZSHRC_DEBUG" ]]; then
