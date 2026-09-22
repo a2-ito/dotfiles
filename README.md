@@ -73,21 +73,24 @@ Claude Code などエージェントのサーフェスでは cmux が会話内�
 `CMUX_AGENT_LAUNCH_KIND` が設定されている場合はフックを登録しない。
 cmux 外のターミナルでも `CMUX_SURFACE_ID` が無いので何もしない。
 
-## cmux サイドバーのカレントディレクトリ表示
+## cmux サイドバーの表示
 
-サイドバーの作業ディレクトリ表示はフルパスで幅に収まらないため、
+サイドバーの作業ディレクトリ表示はフルパスで幅に収まらず読めないため、
 `cmux/cmux.json` の `sidebar.showBranchDirectory` を `false` にして止めてある。
-代わりに `.zshrc` の `chpwd` フックが `cmux set-status` でカレントディレクトリの
-末尾 1 階層をステータスピルとして出す。
 
-| cd 先 | ピルの表示 |
+代わりにワークスペース名 (セッション名) を `<ディレクトリ名>:<ブランチ名>` に固定する。
+cmux は既定でエージェントの会話内容から名前を付けるが、後から見てどの作業か
+分かりづらいため、Claude Code の hook (`~/.claude/hooks/cmux-rename-workspace.sh`) が
+`SessionStart` と `UserPromptSubmit` で `cmux rename-workspace` を叩いて上書きする。
+
+| cd 先 | ワークスペース名 |
 | --- | --- |
-| `~/dotfiles` | `dotfiles` |
-| `~` | `~` |
-| `/` | `/` |
+| git リポジトリ内 | `dotfiles:main` |
+| detached HEAD | `dotfiles:8e97a78` |
+| git 管理外 | `tmp`（ディレクトリ名） |
 
-ソケット越しの呼び出しに 40ms ほどかかるのでバックグラウンドで実行する。
-タブ名の自動設定と同様、エージェントのサーフェスと cmux 外では何もしない。
+hook スクリプトと `~/.claude/settings.json` は (トークンを含むため) dotfiles の
+管理対象外なので、環境を作り直したときは手で入れ直す。
 
 ## シークレットスキャン
 

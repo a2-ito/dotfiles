@@ -193,26 +193,6 @@ fi
 __zshrc_log "cmux tab title"
 
 # ============================================================
-# === cmux: サイドバーにカレントディレクトリを表示 ===
-# ============================================================
-# cmux のサイドバーに出る作業ディレクトリ (sidebar.showBranchDirectory) は
-# フルパスでサイドバー幅に収まらないため cmux.json で切ってある。
-# 代わりにここで末尾 1 階層だけをステータスピルとして出す。
-# ソケット越しの呼び出しで 40ms ほどかかるのでバックグラウンドに逃がす。
-if [[ -n "$CMUX_WORKSPACE_ID" && -z "$CMUX_AGENT_LAUNCH_KIND" ]] && (( $+commands[cmux] )); then
-  __cmux_set_cwd_status() {
-    local label="${PWD:t}"
-    [[ "$PWD" == "$HOME" ]] && label="~"
-    [[ -z "$label" ]] && label="/"
-    cmux set-status cwd "$label" --icon folder --priority 50 >/dev/null 2>&1 &!
-  }
-  autoload -Uz add-zsh-hook
-  add-zsh-hook chpwd __cmux_set_cwd_status
-  __cmux_set_cwd_status
-fi
-__zshrc_log "cmux cwd status"
-
-# ============================================================
 # === DEBUG: 計測終了 & zprof 表示 ===
 # ============================================================
 if [[ -n "$ZSHRC_DEBUG" ]]; then
