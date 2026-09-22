@@ -99,5 +99,8 @@
         "w"
       ]
     }
+  },
+  "sidebar": {
+    "showBranchDirectory": false
   }
 }
